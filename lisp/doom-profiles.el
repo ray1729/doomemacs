@@ -53,6 +53,7 @@ Can be changed externally by setting $DOOMPROFILELOADFILE.")
 (defvar doom-profile-generators
   '(("05-init-vars.auto.el"         . doom-profile--generate-init-vars)
     ("80-loaddefs.auto.el"          . doom-profile--generate-doom-autoloads)
+    ("85-loaddefs.hacks.el"         . doom-profile--generate-loaddefs-hacks)
     ("90-loaddefs-packages.auto.el" . doom-profile--generate-package-autoloads)
     ("95-load-modules.auto.el"      . doom-profile--generate-load-modules))
   "An alist mapping file names to generator functions.
@@ -454,6 +455,10 @@ Defaults to the profile at `doom-profile-default'."
                                      doom-autoloads-excluded-packages)))
    doom-autoloads-excluded-files
    'literal))
+
+;; Work-around for bug with geiser load order, see https://github.com/doomemacs/doomemacs/issues/7472
+(defun doom-profile--generate-loaddefs-hacks ()
+  "(require 'geiser-autoloads)\n(require 'geiser-guile-autoloads)\n")
 
 (provide 'doom-profiles)
 ;;; doom-profiles.el ends here
